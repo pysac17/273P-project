@@ -28,7 +28,6 @@ output/
 
 # COLMAP files (large binary files)
 *.bin
-*.txt
 colmap.LOG.*
 
 # Model 
