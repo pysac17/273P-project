@@ -100,9 +100,6 @@ matches/
 sfm/
 pairs/
 
-# Submission files
-submission.csv
-submissions/
 
 # Model checkpoints and large files
 models/
