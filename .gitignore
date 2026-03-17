@@ -7,25 +7,9 @@ env/
 
 # Python
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+
+# os
+.DS_Store
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints
@@ -34,77 +18,21 @@ wheels/
 !ml-project.ipynb
 
 # Machine Learning / Data Science
-*.pkl
-*.pickle
 *.joblib
-*.model
-*.h5
-*.hdf5
-*.pth
-*.pt
-*.ckpt
-*.bin
-*.onnx
 
 # Data files - exclude main dataset but keep sample
 image-matching-challenge-2025/
-# datasets/
-# *.csv
-# *.json
-# *.parquet
 
-# Keep sample data
-!sample_data/
-
-# Output and results
+# Output and results (large files not included in repo)
 output/
-results/
-logs/
-wandb/
-mlruns/
-
-# Cache and temporary files
-.cache/
-*.cache
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-.coverage.*
-.cache
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
 
 # COLMAP files (large binary files)
 *.bin
 *.txt
 colmap.LOG.*
 
-# HLOC features and matches (can be very large)
-features/
-matches/
-sfm/
-pairs/
-
-
-# Model checkpoints and large files
+# Model 
 models/
-checkpoints/
-*.safetensors
 
 # Temporary processing files
 temp/
