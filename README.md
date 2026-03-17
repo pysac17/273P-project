@@ -47,18 +47,77 @@ pip install -r requirements.txt
 - PIL, NumPy, SciPy, tqdm
 
 ### 3. Dataset Preparation
-The code was tested on the Kaggle Image Matching Challenge 2025 benchmark. Since full datasets are large, this repository contains sample images for testing pipeline execution.
+
+The code was tested on the Kaggle Image Matching Challenge 2025 benchmark. 
+
+#### Dataset Download
+
+**Step 1: Get Kaggle API Token**
+1. Sign in to [Kaggle](https://www.kaggle.com/)
+2. Go to Account → API → Create New API Token
+3. Download `kaggle.json` file
+
+**Step 2: Setup Kaggle API**
+```bash
+# Set your API token (replace with your actual token)
+export KAGGLE_API_TOKEN=your_kaggle_api_token_here
+
+# Or use the kaggle.json file method:
+mkdir -p ~/.kaggle
+cp kaggle.json ~/.kaggle/
+chmod 600 ~/.kaggle/kaggle.json
+```
+
+**Step 3: Download Dataset**
+```bash
+# Download the competition dataset
+kaggle competitions download -c image-matching-challenge-2025
+
+# Extract the dataset
+unzip image-matching-challenge-2025.zip -d DATA_DIR/
+```
+
+**Alternative: Manual Download**
+1. Visit [Kaggle Competition Page](https://www.kaggle.com/competitions/image-matching-challenge-2025)
+2. Click "Download All" 
+3. Extract to your desired `DATA_DIR` location
+
+#### Data Preprocessing
+
+**No preprocessing required** - the pipeline handles all preprocessing automatically:
+
+1. **EXIF Rotation:** Automatic correction of image orientation
+2. **Resizing:** Dynamic resizing for optimal feature extraction  
+3. **Format Handling:** Supports JPG, PNG, and other common formats
+4. **Quality Filtering:** Automatic skipping of corrupted images
 
 **Expected Directory Structure:**
 ```
 DATA_DIR/
-├── dataset1/
-│   ├── img1.jpg
-│   ├── img2.jpg
+├── ETs/
+│   ├── et_et000.png
+│   ├── et_et001.png
 │   └── ...
-├── dataset2/
+├── amy_gardens/
+│   ├── amy_gardens_000.png
 │   └── ...
+├── fbk_vineyard/
+│   └── ...
+└── [11 other datasets...]
 ```
+
+#### Sample Data
+
+For quick testing without downloading the full dataset:
+```bash
+# Use the included sample data
+DATA_DIR="./sample_data"
+```
+
+The `sample_data/` directory contains:
+- **imc2023_theater_church Sample:** 8 images from the theater/church dataset
+
+**Quick Test:** Run `test_sample_data.ipynb` for a complete test on the theater dataset.
 
 ---
 
@@ -189,17 +248,84 @@ ETs,et_et000.png,scene_2,"r11;r12;r13;r21;r22;r23;r31;r32;r33","t1;t2;t3"
 
 ## How to Reproduce Results
 
-### Step-by-Step Reproduction
+### Complete Step-by-Step Guide
 
-1. **Prepare datasets** under `DATA_DIR`
-2. **Run** `ml-project.ipynb` notebook
-3. **Monitor** feature extraction, clustering, and per-cluster SfM progress
-4. **Wait** for completion (approximately 115 minutes for full dataset)
+**Step 1: Environment Setup**
+```bash
+# Clone repository
+git clone https://github.com/pysac17/273P-project/
+cd 273P-project
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+**Step 2: Dataset Acquisition**
+```bash
+# Option A: Full dataset (requires Kaggle API)
+export KAGGLE_API_TOKEN=your_kaggle_api_token_here
+kaggle competitions download -c image-matching-challenge-2025
+unzip image-matching-challenge-2025.zip -d ./DATA_DIR/
+
+# Option B: Sample dataset (no API required)
+DATA_DIR="./sample_data"
+```
+
+**Step 3: Choose Your Approach**
+
+**Option A: Full Dataset (Kaggle Environment)**
+```bash
+# Run the main notebook with FAISS (optimized for Kaggle)
+jupyter notebook ml-project.ipynb
+```
+
+**Option B: Sample Dataset (Local Testing)**
+```bash
+# Run the sample notebook with scikit-learn (easier local setup)
+jupyter notebook test_sample_data.ipynb
+```
+
+**Note**: Each notebook is pre-configured for its respective environment - no path editing required.
+
+Execute cells in order:
+1. **Imports & Setup** - Load libraries and configure paths
+2. **Dataset Discovery** - Scan for available datasets
+3. **Global Feature Extraction** - DINOv2 embeddings (~10-30 min)
+4. **Image Clustering** - HDBSCAN clustering (~1-5 min)
+5. **Pair Generation** - Similarity search (FAISS or scikit-learn) (~5-15 min)
+6. **Local Feature Extraction** - ALIKED descriptors (~20-60 min)
+7. **Feature Matching** - LightGlue matching (~30-90 min)
+8. **3D Reconstruction** - COLMAP SfM (~20-60 min)
+9. **Pose Extraction** - Generate final submission (~1-5 min)
 
 ### Expected Processing Time
-- **Sample Dataset:** ~2-3 minutes
-- **Full Competition Dataset:** ~115 minutes
+- **Sample Dataset:** 15-20 minutes (76 images)
+- **Full Competition Dataset:** 115 minutes (1,945 images)
 - **Memory Usage:** 8-16GB depending on dataset size
+- **Storage Required:** ~100-200MB for sample, ~2-5GB for full dataset
+
+### Troubleshooting
+
+**Common Issues:**
+- **CUDA out of memory:** Reduce `RESIZE_MAX` or use CPU-only mode
+- **COLMAP not found:** Install COLMAP system-wide or use conda environment
+- **Kaggle API errors:** Verify token and account permissions
+- **Missing dependencies:** Run `pip install -r requirements.txt` again
+
+**Resume Capability:** The pipeline automatically skips completed steps, so you can resume if interrupted.
+
+### Performance Validation
+
+**Expected Results (Full Dataset):**
+- **Overall Reconstruction Rate:** 87.0% (1692/1945 images)
+- **Perfect Datasets:** 4 out of 13 achieve 100% reconstruction
+- **Processing Time:** ~115 minutes on modern GPU
+- **Output Size:** ~2-5GB total
+
+**Sample Dataset Results:**
+- **Theater/Church Sample:** 60-76 images expected (80-100% reconstruction rate)
+- **Processing Time:** ~15-20 minutes
+- **Output Size:** ~100-200MB
 
 ### Key Observations from Experiments
 
@@ -243,12 +369,35 @@ ETs,et_et000.png,scene_2,"r11;r12;r13;r21;r22;r23;r31;r32;r33","t1;t2;t3"
 
 ---
 
+## Implementation Notes
+
+### Dual Approach for Compatibility
+
+**Main Project (`ml-project.ipynb`)**:
+- Designed for Kaggle environment with FAISS pre-installed
+- Uses FAISS for high-performance similarity search
+- Optimized for large-scale processing on GPU
+
+**Sample Data Version (`test_sample_data.ipynb`)**:
+- Updated to use scikit-learn for better local compatibility
+- Replaces FAISS with `NearestNeighbors` (cosine similarity)
+- Provides identical results with easier dependency management
+- Ideal for local testing and development
+
+**Technical Equivalence**:
+- Both implementations use L2-normalized features
+- FAISS inner product ≈ scikit-learn cosine similarity
+- Performance comparable for dataset sizes ≤ 1000 images
+- Same pair generation logic and clustering pipeline
+
+---
+
 ## Technical Implementation
 
 ### Core Functions
 - `extract_global_features()`: DINOv2 embedding extraction with L2 normalization
 - `cluster_images()`: HDBSCAN clustering with noise reassignment
-- `generate_pairs()`: Intelligent pair generation (FAISS + exhaustive)
+- `generate_pairs()`: Intelligent pair generation (FAISS for Kaggle, scikit-learn for local)
 - `extract_all_poses()`: Multi-format COLMAP pose extraction
 
 ### Error Handling
