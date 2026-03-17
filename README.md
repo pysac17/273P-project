@@ -5,13 +5,13 @@
 
 ---
 
-## 📋 Project Overview
+## Project Overview
 
 This project addresses the challenge of reconstructing 3D scenes from unstructured image collections. Real-world image datasets often contain noisy, unordered, or unrelated photos, making traditional Structure-from-Motion (SfM) pipelines inefficient or prone to errors.
 
 Our approach combines global and local feature extraction, density-based image clustering, and per-cluster 3D reconstruction to robustly estimate camera poses and reconstruct scenes.
 
-### 🔧 Key Components
+### Key Components
 
 - **Global Features:** DINOv2 ViT-S/14 embeddings for semantic similarity
 - **Clustering:** HDBSCAN for scene separation and noise handling  
@@ -23,7 +23,7 @@ The pipeline efficiently handles large datasets by avoiding exhaustive pairwise 
 
 ---
 
-## 🚀 Setup Instructions
+## Setup Instructions
 
 ### 1. Clone Repository
 ```bash
@@ -62,7 +62,7 @@ DATA_DIR/
 
 ---
 
-## 🎯 How to Train the Model
+## How to Train the Model
 
 This pipeline uses pre-trained models rather than requiring traditional training:
 
@@ -101,7 +101,7 @@ Execute all cells sequentially. The pipeline will:
 
 ---
 
-## 📊 How to Evaluate the Model
+## How to Evaluate the Model
 
 ### Primary Metrics
 
@@ -141,7 +141,7 @@ print(f"Reconstruction rate: {len(submission) / total_images:.2%}")
 
 ---
 
-## 📁 Expected Outputs
+## Expected Outputs
 
 The pipeline generates the following directory structure:
 
@@ -171,7 +171,7 @@ output/
 └── submission.csv     # Final poses in competition format
 ```
 
-**⚠️ Important Note:** Due to large file sizes, the `output/` directory is **not included** in this repository. You need to run the pipeline to generate these files yourself.
+** Important Note:** Due to large file sizes, the `output/` directory is **not included** in this repository. You need to run the pipeline to generate these files yourself.
 
 ### Output File Sizes
 - **Features:** ~100-500MB per dataset
@@ -187,7 +187,7 @@ ETs,et_et000.png,scene_2,"r11;r12;r13;r21;r22;r23;r31;r32;r33","t1;t2;t3"
 
 ---
 
-## 🔄 How to Reproduce Results
+## How to Reproduce Results
 
 ### Step-by-Step Reproduction
 
@@ -203,27 +203,27 @@ ETs,et_et000.png,scene_2,"r11;r12;r13;r21;r22;r23;r31;r32;r33","t1;t2;t3"
 
 ### Key Observations from Experiments
 
-**✅ What Worked Well:**
+** What Worked Well:**
 - Perfect reconstruction (100%) on 4 datasets: imc2023_haiper, pt_piazzasanmarco_grandplace, pt_sacrecoeur_trevi_tajmahal, pt_stpeters_stpauls
 - Strong performance (>95%) on large-scale datasets like pt_brandenburg_british_buckingham (224/225)
 - Consistent clustering producing 2-5 meaningful clusters per dataset
 
-**⚠️ Failure Cases:**
+** Failure Cases:**
 - Lower performance on datasets with repetitive patterns: imc2023_heritage (52.6%), imc2024_lizard_pond (67.3%)
 - Performance degrades with limited image overlap and ambiguous viewpoints
 
 ---
 
-## 🎯 Project Highlights
+## Project Highlights
 
-### 🏆 Key Strengths
+### Key Strengths
 - **Efficient Hierarchical Matching:** Combines global semantic embeddings and local geometric features
 - **Robust Clustering:** Handles noisy images and multi-scene datasets automatically
 - **Scalable SfM:** Matches only relevant image pairs per cluster to reduce runtime
 - **Hybrid Feature Pipeline:** DINOv2 + ALIKED + LightGlue achieves high registration rates
 - **Code Reusability:** Modular functions for global/local features, clustering, pair generation, and pose extraction
 
-### 💡 Innovation
+### Innovation
 - **Noise-aware clustering** with automatic reassignment
 - **Cross-cluster bridge pairs** for connectivity
 - **Adaptive parameter selection** based on dataset size
@@ -231,7 +231,7 @@ ETs,et_et000.png,scene_2,"r11;r12;r13;r21;r22;r23;r31;r32;r33","t1;t2;t3"
 
 ---
 
-## 📦 Sample Data & Demo
+## Sample Data & Demo
 
 ### Sample Dataset
 `sample_data/` — Small set of images to test pipeline execution without downloading full datasets
@@ -243,7 +243,7 @@ ETs,et_et000.png,scene_2,"r11;r12;r13;r21;r22;r23;r31;r32;r33","t1;t2;t3"
 
 ---
 
-## 🔧 Technical Implementation
+## Technical Implementation
 
 ### Core Functions
 - `extract_global_features()`: DINOv2 embedding extraction with L2 normalization
@@ -259,7 +259,7 @@ ETs,et_et000.png,scene_2,"r11;r12;r13;r21;r22;r23;r31;r32;r33","t1;t2;t3"
 
 ---
 
-## 📚 References
+## References
 
 - **DINOv2:** https://arxiv.org/abs/2304.07193
 - **ALIKED:** https://github.com/shuaizhao/aliked
@@ -269,7 +269,7 @@ ETs,et_et000.png,scene_2,"r11;r12;r13;r21;r22;r23;r31;r32;r33","t1;t2;t3"
 
 ---
 
-## 📈 Performance Summary
+## Performance Summary
 
 **Overall Achievement:** 87.0% reconstruction rate across 13 diverse datasets  
 **Total Processing Time:** 115 minutes for complete benchmark  
