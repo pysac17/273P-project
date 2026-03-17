@@ -27,9 +27,11 @@ wheels/
 .installed.cfg
 *.egg
 
-# Jupyter Notebook
+# Jupyter Notebook checkpoints
 .ipynb_checkpoints
-*.ipynb
+
+# Keep the main notebook but exclude checkpoints
+!ml-project.ipynb
 
 # Machine Learning / Data Science
 *.pkl
@@ -44,12 +46,15 @@ wheels/
 *.bin
 *.onnx
 
-# Data files (uncomment if you want to exclude data)
-# data/
+# Data files - exclude main dataset but keep sample
+image-matching-challenge-2025/
 # datasets/
 # *.csv
 # *.json
 # *.parquet
+
+# Keep sample data
+!sample_data/
 
 # Output and results
 output/
