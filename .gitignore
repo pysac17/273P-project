@@ -1,0 +1,110 @@
+# Environment
+ml-env/
+venv/
+env/
+.conda/
+.env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Machine Learning / Data Science
+*.pkl
+*.pickle
+*.joblib
+*.model
+*.h5
+*.hdf5
+*.pth
+*.pt
+*.ckpt
+*.bin
+*.onnx
+
+# Data files (uncomment if you want to exclude data)
+# data/
+# datasets/
+# *.csv
+# *.json
+# *.parquet
+
+# Output and results
+output/
+results/
+logs/
+wandb/
+mlruns/
+
+# Cache and temporary files
+.cache/
+*.cache
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.coverage.*
+.cache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# COLMAP files (large binary files)
+*.bin
+*.txt
+colmap.LOG.*
+
+# HLOC features and matches (can be very large)
+features/
+matches/
+sfm/
+pairs/
+
+# Submission files
+submission.csv
+submissions/
+
+# Model checkpoints and large files
+models/
+checkpoints/
+*.safetensors
+
+# Temporary processing files
+temp/
+tmp/
+*.tmp
